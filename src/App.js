@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import { useState,useEffect } from 'react';
+import { BrowserRouter, Routes, Route,useNavigate } from 'react-router-dom';
+import Login from './components/Login';
+import Home from './components/Home';
+import Enroll from './components/Enroll';
+
 import './App.css';
 
 function App() {
+  // const navigate = useNavigate();
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    console.log("here");
+    const userExist = localStorage.getItem("yoga_user");
+    if(userExist){
+      setUserData(JSON.parse(userExist));
+      // navigate("/dashboard");
+    }
+  }, [userData])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      
+      <Routes>
+        <Route path="/" element={<Login setUserData={setUserData} />} />
+        <Route path="/dashboard" element={<Home userData={userData} />} />
+        <Route path="/enroll" element={<Enroll userData={userData} setUserData={setUserData} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
